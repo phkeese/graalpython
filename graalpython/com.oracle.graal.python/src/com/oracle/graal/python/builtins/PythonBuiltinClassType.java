@@ -422,6 +422,7 @@ public enum PythonBuiltinClassType implements TruffleObject {
     SocketHError("herror", J__SOCKET, Flags.EXCEPTION),
     BinasciiError("Error", "binascii", Flags.EXCEPTION),
     BinasciiIncomplete("Incomplete", "binascii", Flags.EXCEPTION),
+    TkinterTclError("TclError", "_tkinter", Flags.EXCEPTION),
     SSLError("SSLError", J__SSL, Flags.EXCEPTION),
     SSLZeroReturnError("SSLZeroReturnError", J__SSL, Flags.EXCEPTION),
     SSLWantReadError("SSLWantReadError", J__SSL, Flags.EXCEPTION),
