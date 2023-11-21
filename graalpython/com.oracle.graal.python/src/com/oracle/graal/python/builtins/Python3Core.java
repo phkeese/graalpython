@@ -56,6 +56,7 @@ import java.util.Map.Entry;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
 
+import com.oracle.graal.python.builtins.modules.TkinterModuleBuiltins;
 import org.graalvm.nativeimage.ImageInfo;
 
 import com.oracle.graal.python.PythonLanguage;
@@ -527,6 +528,7 @@ public abstract class Python3Core {
                         new WeakRefModuleBuiltins(),
                         new ReferenceTypeBuiltins(),
                         new TracemallocModuleBuiltins(),
+                        new TkinterModuleBuiltins(),
                         // contextvars
                         new ContextVarBuiltins(),
                         new ContextBuiltins(),
