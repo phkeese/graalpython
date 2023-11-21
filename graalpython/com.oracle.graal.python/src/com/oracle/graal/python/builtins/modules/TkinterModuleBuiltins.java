@@ -44,7 +44,9 @@ import java.util.List;
 
 import com.oracle.graal.python.builtins.Builtin;
 import com.oracle.graal.python.builtins.CoreFunctions;
+import com.oracle.graal.python.builtins.Python3Core;
 import com.oracle.graal.python.builtins.PythonBuiltins;
+import com.oracle.graal.python.nodes.SpecialAttributeNames;
 import com.oracle.graal.python.nodes.function.PythonBuiltinBaseNode;
 import com.oracle.graal.python.nodes.function.PythonBuiltinNode;
 import com.oracle.truffle.api.dsl.GenerateNodeFactory;
@@ -56,4 +58,19 @@ public final class TkinterModuleBuiltins extends PythonBuiltins {
     protected List<? extends NodeFactory<? extends PythonBuiltinBaseNode>> getNodeFactories() {
         return List.of();
     }
+
+    @Override
+    public void initialize(Python3Core core) {
+        // TODO: Is it okay to fake TK_VERSION and TCL_VERSION?
+        addBuiltinConstant("TK_VERSION", "8.6");
+        addBuiltinConstant("TCL_VERSION", "8.6");
+        addBuiltinConstant("READABLE", 1<<1);
+        addBuiltinConstant("WRITABLE", 1<<2);
+        addBuiltinConstant("EXCEPTION", 1<<3);
+    }
+
+    // _flatten
+    // _cnfmerge
+    // Tcl_Obj
+    // create
 }
