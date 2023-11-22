@@ -40,17 +40,20 @@
  */
 package com.oracle.graal.python.builtins.modules;
 
-import java.util.List;
-
 import com.oracle.graal.python.builtins.Builtin;
 import com.oracle.graal.python.builtins.CoreFunctions;
 import com.oracle.graal.python.builtins.Python3Core;
 import com.oracle.graal.python.builtins.PythonBuiltins;
-import com.oracle.graal.python.nodes.SpecialAttributeNames;
+import com.oracle.graal.python.builtins.objects.PNone;
+import com.oracle.graal.python.builtins.objects.module.PythonModule;
 import com.oracle.graal.python.nodes.function.PythonBuiltinBaseNode;
 import com.oracle.graal.python.nodes.function.PythonBuiltinNode;
 import com.oracle.truffle.api.dsl.GenerateNodeFactory;
 import com.oracle.truffle.api.dsl.NodeFactory;
+import com.oracle.truffle.api.dsl.Specialization;
+import com.oracle.truffle.api.frame.VirtualFrame;
+
+import java.util.List;
 
 @CoreFunctions(defineModule = "_tkinter")
 public final class TkinterModuleBuiltins extends PythonBuiltins {
@@ -69,8 +72,24 @@ public final class TkinterModuleBuiltins extends PythonBuiltins {
         addBuiltinConstant("EXCEPTION", 1<<3);
     }
 
-    // _flatten
-    // _cnfmerge
+    @Builtin(name = "create", declaresExplicitSelf = true, minNumOfPositionalArgs = 9)
+    @GenerateNodeFactory
+    public abstract static class Create extends PythonBuiltinNode {
+        @Specialization
+        public Object create(VirtualFrame frame,
+                             PythonModule self,
+                             String screenName,
+                             String baseName,
+                             String className,
+                             Boolean interactive,
+                             Boolean wantobjects,
+                             Boolean wantTk,
+                             Boolean sync,
+                             String use) {
+            return PNone.NONE;
+        }
+    }
+    // _flatten, pass at AttributeError
+    // _cnfmerge, pass at AttributeError
     // Tcl_Obj
-    // create
 }
