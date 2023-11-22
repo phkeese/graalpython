@@ -43,15 +43,22 @@ package com.oracle.graal.python.builtins.modules;
 import com.oracle.graal.python.builtins.Builtin;
 import com.oracle.graal.python.builtins.CoreFunctions;
 import com.oracle.graal.python.builtins.Python3Core;
+import com.oracle.graal.python.builtins.PythonBuiltinClassType;
 import com.oracle.graal.python.builtins.PythonBuiltins;
 import com.oracle.graal.python.builtins.objects.PNone;
+import com.oracle.graal.python.builtins.objects.PythonAbstractObject;
 import com.oracle.graal.python.builtins.objects.module.PythonModule;
+import com.oracle.graal.python.builtins.objects.object.PythonObject;
+import com.oracle.graal.python.nodes.ErrorMessages;
+import com.oracle.graal.python.nodes.PRaiseNode;
 import com.oracle.graal.python.nodes.function.PythonBuiltinBaseNode;
 import com.oracle.graal.python.nodes.function.PythonBuiltinNode;
+import com.oracle.truffle.api.dsl.Cached;
 import com.oracle.truffle.api.dsl.GenerateNodeFactory;
 import com.oracle.truffle.api.dsl.NodeFactory;
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.frame.VirtualFrame;
+import com.oracle.truffle.api.strings.TruffleString;
 
 import java.util.List;
 
@@ -59,7 +66,7 @@ import java.util.List;
 public final class TkinterModuleBuiltins extends PythonBuiltins {
     @Override
     protected List<? extends NodeFactory<? extends PythonBuiltinBaseNode>> getNodeFactories() {
-        return List.of();
+        return TkinterModuleBuiltinsFactory.getFactories();
     }
 
     @Override
@@ -70,25 +77,42 @@ public final class TkinterModuleBuiltins extends PythonBuiltins {
         addBuiltinConstant("READABLE", 1<<1);
         addBuiltinConstant("WRITABLE", 1<<2);
         addBuiltinConstant("EXCEPTION", 1<<3);
+
+        super.initialize(core);
     }
 
     @Builtin(name = "create", declaresExplicitSelf = true, minNumOfPositionalArgs = 9)
     @GenerateNodeFactory
     public abstract static class Create extends PythonBuiltinNode {
+        // TODO: screenName and use are allowed to be None or a string, how do we model this in GraalPy?
         @Specialization
         public Object create(VirtualFrame frame,
                              PythonModule self,
-                             String screenName,
-                             String baseName,
-                             String className,
+                             PNone screenName,
+                             TruffleString baseName,
+                             TruffleString className,
                              Boolean interactive,
-                             Boolean wantobjects,
+                             Integer wantobjects,
                              Boolean wantTk,
                              Boolean sync,
-                             String use) {
+                             PNone use) {
             return PNone.NONE;
         }
     }
+
+    @Builtin(name = "print", declaresExplicitSelf = true, minNumOfPositionalArgs = 2)
+    @GenerateNodeFactory
+    public abstract static class Print extends PythonBuiltinNode {
+        @Specialization
+        public Object print(VirtualFrame frame,
+                            PythonModule self,
+                            TruffleString value) {
+            System.out.println(value);
+            return PNone.NONE;
+        }
+    }
+
+
     // _flatten, pass at AttributeError
     // _cnfmerge, pass at AttributeError
     // Tcl_Obj
